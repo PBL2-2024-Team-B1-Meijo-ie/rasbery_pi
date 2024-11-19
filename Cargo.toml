@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+ureq = { version = "2.10.1", features = ["json"] }
 
 [profile.dev]
 debug = 0
