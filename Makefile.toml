@@ -10,7 +10,7 @@ mv target/armv7-unknown-linux-gnueabihf/debug/rasbery_pi ./artifacts/rasbery_pi
 
 [tasks.ras_b]
 command = "cargo"
-args = ["build","--target", "armv7-unknown-linux-gnueabihf"]
+args = ["build","--target=armv7-unknown-linux-gnueabihf"]
 
 [tasks.mv]
 description = "Move the binary to artifacts"
