@@ -15,5 +15,5 @@ args = ["build","--target", "armv7-unknown-linux-gnueabihf"]
 [tasks.mv]
 description = "Move the binary to artifacts"
 script = """
-mv target/debug/rasbery_pi ./artifacts/rasbery_pi
+mv target/armv7-unknown-linux-gnueabihf/debug/rasbery_pi ./artifacts/rasbery_pi
 """
