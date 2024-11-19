@@ -1,0 +1,9 @@
+[tasks.ras]
+description = "Cross Compile Rust for ARMv7"
+# command = "cross"
+# args = ["build","--target", "armv7-unknown-linux-gnueabihf"]
+# script.post = "mv target/armv7-unknown-linux-gnueabihf/debug/rasbery_pi ./artifacts/rasbery_pi"
+script = """
+cross build --target armv7-unknown-linux-gnueabihf
+mv target/armv7-unknown-linux-gnueabihf/debug/rasbery_pi ./artifacts/rasbery_pi
+"""
