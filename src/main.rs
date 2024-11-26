@@ -40,6 +40,9 @@ struct TPV {
 }
 
 fn main() {
+    // dotenvy::dotenv().ok();
+    // let request_url = std::env::var("REQUEST_URL").unwrap();
+    // println!("{}", request_url);
     // println!("Hello, world!");
     // // 適当なAPIにアクセスしてみる
     // let url = "https://jsonplaceholder.typicode.com/todos";
@@ -70,6 +73,12 @@ fn gpsd() -> Result<(), Box<dyn error::Error>> {
     loop {
         reader.read_until(b'\n', &mut buf)?;
         let deserialized: TPV = serde_json::from_str(str::from_utf8(&buf)?)?;
+        match deserialized.class {
+            Some(ref class) if class == "TPV" => {
+                println!("{:?}", deserialized);
+            }
+            _ => {}
+        }
         println!("{:?}", deserialized);
         buf.clear();
     }
