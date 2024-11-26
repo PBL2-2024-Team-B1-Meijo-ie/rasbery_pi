@@ -6,7 +6,7 @@ use std::{
     vec,
 };
 
-use chrono::{DateTime, Local};
+use chrono::{DateTime, Local, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize)]
@@ -24,7 +24,7 @@ struct TPV {
     status: Option<u8>,
     mode: Option<u8>,
     #[serde(alias = "time")]
-    timestamp: Option<DateTime<Local>>,
+    timestamp: Option<NaiveDateTime>,
     lat: Option<f64>,
     lon: Option<f64>,
     alt: Option<f64>,
@@ -45,7 +45,7 @@ struct RasPiRequest {
     busposition_id: i32,
     lat: f64,
     lon: f64,
-    time: DateTime<Local>,
+    time: NaiveDateTime,
 }
 
 fn main() {
