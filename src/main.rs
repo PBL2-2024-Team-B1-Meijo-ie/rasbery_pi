@@ -71,6 +71,7 @@ fn gpsd() -> Result<(), Box<dyn error::Error>> {
         reader.read_until(b'\n', &mut buf)?;
         let deserialized: TPV = serde_json::from_str(str::from_utf8(&buf)?)?;
         println!("{:?}", deserialized);
+        buf.clear();
     }
     Ok(())
 }
