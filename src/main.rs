@@ -91,7 +91,7 @@ fn gps() -> Result<(), Box<dyn error::Error>> {
                     time: deserialized.timestamp.unwrap(),
                 };
                 println!("{:?}", req);
-                println!("{:?}", serde_json::to_string(&req)?);
+                // println!("{:?}", serde_json::to_string(&req)?);
             }
             _ => {}
         }
