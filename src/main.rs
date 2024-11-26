@@ -49,9 +49,6 @@ struct RasPiRequest {
 }
 
 fn main() {
-    // dotenvy::dotenv().ok();
-    // let request_url = std::env::var("REQUEST_URL").unwrap();
-    // println!("{}", request_url);
     // println!("Hello, world!");
     // // 適当なAPIにアクセスしてみる
     // let url = "https://jsonplaceholder.typicode.com/todos";
@@ -59,10 +56,14 @@ fn main() {
     // println!("{}", body);
     // println!("Hello, world!");
 
-    gps().unwrap();
+    dotenvy::dotenv().ok();
+    let request_url = std::env::var("REQUEST_URL").unwrap();
+    println!("{}", request_url);
+
+    gps(request_url).unwrap();
 }
 
-fn gps() -> Result<(), Box<dyn error::Error>> {
+fn gps(requesr_url: String) -> Result<(), Box<dyn error::Error>> {
     let gpd_addr = "127.0.0.1:2947";
 
     let mut stream = TcpStream::connect(gpd_addr)?;
@@ -90,7 +91,9 @@ fn gps() -> Result<(), Box<dyn error::Error>> {
                     lon: deserialized.lon.unwrap(),
                     time: deserialized.timestamp.unwrap(),
                 };
-                println!("{:?}", req);
+                println!("gps: {:?}", req);
+                let res = ureq::post(&requesr_url).send_json(req);
+                println!("res: {:?}", res);
                 // println!("{:?}", serde_json::to_string(&req)?);
             }
             _ => {}
