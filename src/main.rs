@@ -24,7 +24,7 @@ struct TPV {
     status: Option<u8>,
     mode: Option<u8>,
     #[serde(alias = "time")]
-    timestamp: Option<NaiveDateTime>,
+    timestamp: Option<DateTime<Local>>,
     lat: Option<f64>,
     lon: Option<f64>,
     alt: Option<f64>,
@@ -90,7 +90,7 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
                     busposition_id: 1,
                     lat: deserialized.lat.unwrap(),
                     lon: deserialized.lon.unwrap(),
-                    time: deserialized.timestamp.unwrap(),
+                    time: deserialized.timestamp.unwrap().naive_utc(),
                 };
                 println!("gps: {:?}", req);
                 let req_with_params = format!("{}?{}", request_path, into_param_string(req));
