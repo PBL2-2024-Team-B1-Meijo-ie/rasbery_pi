@@ -79,7 +79,6 @@ fn gpsd() -> Result<(), Box<dyn error::Error>> {
             }
             _ => {}
         }
-        println!("{:?}", deserialized);
         buf.clear();
     }
     Ok(())
