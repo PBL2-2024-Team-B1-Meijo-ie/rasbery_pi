@@ -93,7 +93,8 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
                     time: deserialized.timestamp.unwrap(),
                 };
                 println!("gps: {:?}", req);
-                let res = ureq::post(&request_path).send_json(req);
+                let req_with_params = format!("{}?{}", request_path, into_param_string(req));
+                let res = ureq::get(&req_with_params).call()?.into_string()?;
                 println!("res: {:?}", res);
                 // println!("{:?}", serde_json::to_string(&req)?);
             }
@@ -102,4 +103,13 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
         buf.clear();
     }
     Ok(())
+}
+
+fn into_param_string(req: RasPiRequest) -> String {
+    let mut params = vec![];
+    params.push(format!("buspositionID={}", req.busposition_id));
+    params.push(format!("lat={}", req.lat));
+    params.push(format!("lon={}", req.lon));
+    params.push(format!("time={}", req.time));
+    params.join("&")
 }
