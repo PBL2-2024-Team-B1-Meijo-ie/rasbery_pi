@@ -110,7 +110,7 @@ fn into_param_string(req: RasPiRequest) -> String {
     params.push(format!("buspositionID={}", req.busposition_id));
     params.push(format!("lat={}", req.lat));
     params.push(format!("lon={}", req.lon));
-    let time = format!("{}:{}", req.time.hour(), req.time.minute());
+    let time = req.time.format("%H").to_string();
     params.push(format!("time={}", time));
     params.join("&")
 }
