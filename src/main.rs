@@ -39,6 +39,15 @@ struct TPV {
     speed: Option<f64>,
 }
 
+#[derive(Debug, Serialize)]
+struct RasPiRequest {
+    #[serde(rename = "buspositionID")]
+    busposition_id: i32,
+    lat: f64,
+    lon: f64,
+    time: DateTime<Local>,
+}
+
 fn main() {
     // dotenvy::dotenv().ok();
     // let request_url = std::env::var("REQUEST_URL").unwrap();
@@ -50,10 +59,10 @@ fn main() {
     // println!("{}", body);
     // println!("Hello, world!");
 
-    gpsd().unwrap();
+    gps().unwrap();
 }
 
-fn gpsd() -> Result<(), Box<dyn error::Error>> {
+fn gps() -> Result<(), Box<dyn error::Error>> {
     let gpd_addr = "127.0.0.1:2947";
 
     let mut stream = TcpStream::connect(gpd_addr)?;
@@ -75,7 +84,13 @@ fn gpsd() -> Result<(), Box<dyn error::Error>> {
         let deserialized: TPV = serde_json::from_str(str::from_utf8(&buf)?)?;
         match deserialized.class {
             Some(ref class) if class == "TPV" => {
-                println!("{:?}", deserialized);
+                let req = RasPiRequest {
+                    busposition_id: 1,
+                    lat: deserialized.lat.unwrap(),
+                    lon: deserialized.lon.unwrap(),
+                    time: deserialized.timestamp.unwrap(),
+                };
+                println!("{:?}", req);
             }
             _ => {}
         }
