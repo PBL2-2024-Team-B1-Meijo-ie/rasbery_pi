@@ -112,6 +112,6 @@ fn into_param_string(req: RasPiRequest) -> String {
     params.push(format!("lon={}", req.lon));
     let time = format!("{}", req.time.hour());
     // let time = req.time.format("%H:%M").to_string();
-    params.push(format!("time={}", time));
+    params.push(format!("time={}", 9));
     params.join("&")
 }
