@@ -6,7 +6,7 @@ use std::{
     vec,
 };
 
-use chrono::{DateTime, Local, NaiveDateTime};
+use chrono::{DateTime, Local, NaiveDateTime, Timelike};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize)]
@@ -110,6 +110,7 @@ fn into_param_string(req: RasPiRequest) -> String {
     params.push(format!("buspositionID={}", req.busposition_id));
     params.push(format!("lat={}", req.lat));
     params.push(format!("lon={}", req.lon));
-    params.push(format!("time={}", req.time));
+    let time = format!("{}:{}", req.time.hour(), req.time.minute());
+    params.push(format!("time={}", time));
     params.join("&")
 }
