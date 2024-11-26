@@ -94,7 +94,7 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
                 };
                 println!("gps: {:?}", req);
                 let req_with_params = format!("{}?{}", request_path, into_param_string(req));
-                let res = ureq::get(&req_with_params).call()?.into_string()?;
+                let res = ureq::get(&req_with_params).call();
                 println!("res: {:?}", res);
                 // println!("{:?}", serde_json::to_string(&req)?);
             }
