@@ -63,8 +63,9 @@ fn main() {
     gps(request_url).unwrap();
 }
 
-fn gps(requesr_url: String) -> Result<(), Box<dyn error::Error>> {
+fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
     let gpd_addr = "127.0.0.1:2947";
+    let request_path = format!("{}/raspi", request_url);
 
     let mut stream = TcpStream::connect(gpd_addr)?;
     println!("Connected to the server!");
@@ -92,7 +93,7 @@ fn gps(requesr_url: String) -> Result<(), Box<dyn error::Error>> {
                     time: deserialized.timestamp.unwrap(),
                 };
                 println!("gps: {:?}", req);
-                let res = ureq::post(&requesr_url).send_json(req);
+                let res = ureq::post(&request_path).send_json(req);
                 println!("res: {:?}", res);
                 // println!("{:?}", serde_json::to_string(&req)?);
             }
