@@ -3,6 +3,8 @@ use std::{
     error,
     io::{self, BufRead, Read, Write},
     net::TcpStream,
+    thread::sleep,
+    time::Duration,
     vec,
 };
 
@@ -60,6 +62,18 @@ fn main() {
     let request_url = std::env::var("REQUEST_URL").unwrap();
     println!("{}", request_url);
 
+    let test_data = RasPiRequest {
+        busposition_id: 1,
+        lat: 35.0,
+        lon: 135.0,
+        time: NaiveDateTime::parse_from_str("2021-01-01 00:00:00", "%Y-%m-%d %H:%M:%S").unwrap(),
+    };
+
+    let request_path = format!("{}/raspi", request_url);
+
+    // let res = ureq::post(&request_path).send_json(test_data).unwrap();
+    // println!("{:?}", res);
+
     gps(request_url).unwrap();
 }
 
@@ -82,6 +96,7 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
     let mut reader = io::BufReader::new(&stream);
     let mut buf = vec![];
     loop {
+        sleep(Duration::from_secs(5));
         reader.read_until(b'\n', &mut buf)?;
         let deserialized: TPV = serde_json::from_str(str::from_utf8(&buf)?)?;
         match deserialized.class {
@@ -93,8 +108,15 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
                     time: deserialized.timestamp.unwrap().naive_utc(),
                 };
                 println!("gps: {:?}", req);
-                let req_with_params = format!("{}?{}", request_path, into_param_string(req));
-                let res = ureq::get(&req_with_params).call();
+                // let req_with_params = format!("{}?{}", request_path, into_param_string(req));
+                let res = ureq::post(&request_path).send_json(req);
+                let res = match res {
+                    Ok(res) => res,
+                    Err(e) => {
+                        println!("ERROR: {:?}", e);
+                        continue;
+                    }
+                };
                 println!("res: {:?}", res);
                 // println!("{:?}", serde_json::to_string(&req)?);
             }
