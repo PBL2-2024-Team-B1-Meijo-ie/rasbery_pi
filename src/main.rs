@@ -96,7 +96,6 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
     let mut reader = io::BufReader::new(&stream);
     let mut buf = vec![];
     loop {
-        sleep(Duration::from_secs(5));
         reader.read_until(b'\n', &mut buf)?;
         let deserialized: TPV = serde_json::from_str(str::from_utf8(&buf)?)?;
         match deserialized.class {
@@ -110,15 +109,15 @@ fn gps(request_url: String) -> Result<(), Box<dyn error::Error>> {
                 println!("gps: {:?}", req);
                 // let req_with_params = format!("{}?{}", request_path, into_param_string(req));
                 let res = ureq::post(&request_path).send_json(req);
-                let res = match res {
-                    Ok(res) => res,
+                let result = match res {
+                    Ok(res) => format!("res: {:?}", res),
                     Err(e) => {
-                        println!("ERROR: {:?}", e);
-                        continue;
+                        format!("ERROR: {:?}", e)
                     }
                 };
-                println!("res: {:?}", res);
+                println!("result: {:?}", result);
                 // println!("{:?}", serde_json::to_string(&req)?);
+                sleep(Duration::from_secs(5));
             }
             _ => {}
         }
